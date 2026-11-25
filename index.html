@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MITSUTOYO管理</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0e7c9a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MITSUTOYO管理">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{--bg:#eef2f4;--sf:#fff;--ink:#14242e;--mut:#5b6b75;--ln:#d3dce1;--ac:#0e7c9a;--bad:#c8372d;--badbg:#fbe9e7;--off:#e3e8eb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10191f;--sf:#192630;--ink:#e6eef2;--mut:#93a5af;--ln:#2c3c47;--ac:#4cb8d6;--bad:#ff8a7e;--badbg:#3a1f1c;--off:#25343e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10191f;--sf:#192630;--ink:#e6eef2;--mut:#93a5af;--ln:#2c3c47;--ac:#4cb8d6;--bad:#ff8a7e;--badbg:#3a1f1c;--off:#25343e;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Hiragino Sans","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif}
+header{padding:14px 14px 0}
+h1{font-size:18px;margin:0}
+#st{font-size:12px;color:var(--mut);margin:2px 0 10px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--ln)}
+.tabs button{flex:1;padding:10px 0;border:0;background:none;color:var(--mut);font:inherit;font-size:13px;font-weight:600;border-bottom:3px solid transparent;cursor:pointer}
+.tabs button.on{color:var(--ac);border-color:var(--ac)}
+main{padding:12px 14px 40px;max-width:760px;margin:0 auto}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.nav b{font-size:16px}
+.btn{padding:8px 14px;border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:8px;font:inherit;cursor:pointer}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:#fff}
+.btn.ic{padding:8px 10px}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.hb{display:block;width:100%;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.btn.sm{padding:6px 10px;font-size:13px}.chip.pd,.z.pd{background:hsl(150 45% 32%);color:#fff}.chip.c2{font-size:10px;padding:2px;margin-bottom:2px;white-space:nowrap;text-overflow:ellipsis}button.z.z2{height:14px;line-height:14px;font-size:9px;margin-bottom:1px}.fold{margin-bottom:6px}.fh{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 12px;margin:6px 0;border:1px solid var(--ln);background:var(--bg);color:var(--ink);border-radius:10px;font:inherit;font-weight:600;cursor:pointer}.fh small{color:var(--mut);font-weight:400}
+.ex .er,.ex .eh{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center;margin-bottom:6px}.ex .eh{font-size:12px;color:var(--mut);margin-bottom:4px}.ex .en{font-size:14px}.ex .ea{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;font-size:14px}.ex .et{text-align:right;margin-top:6px}
+button.z{border:0;width:100%;font-family:inherit;cursor:pointer;padding:0}.z.rp{box-shadow:inset 0 -3px 0 rgba(255,255,255,.85)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}.toast.on{opacity:1}
+@page{size:182mm 257mm;margin:8mm}
+.pfp{position:fixed;left:-10000px;top:0}
+.pf{width:190mm;background:#fff;color:#000;font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;font-size:3.5mm;line-height:1.3;text-align:left;page-break-inside:avoid}
+.pf *{box-sizing:border-box}
+.pf table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;min-width:0}
+.pf .pb{border-top:var(--bw,1px) solid #000;border-left:var(--bw,1px) solid #000}
+.pf td{border:0;border-right:var(--bw,1px) solid #000;border-bottom:var(--bw,1px) solid #000;padding:0 1.2mm;text-align:left;vertical-align:middle;overflow:hidden;word-break:break-all;background:#fff}
+.pf td.lb{text-align:center;letter-spacing:0;white-space:nowrap;padding:0}
+.pf td.c{text-align:center}
+.pf td.np{padding:0}
+.pf td.r{text-align:right}
+.pf td.v{font-size:3.6mm}
+.pf td.vs{letter-spacing:0}
+.pf td.vs span{display:block;line-height:1.55}
+.pf .pt{position:relative;height:9mm}
+.pf .ti{position:absolute;left:0;right:0;bottom:1.2mm;text-align:center;font-size:5.2mm;font-weight:600;letter-spacing:.12em;padding-left:.12em}
+.pf .co{position:absolute;right:0;bottom:1.2mm;font-size:5.2mm;font-weight:600}
+.pf .v2{display:flex;justify-content:space-between;align-items:center;height:12.6mm}
+.pf .v2 .sm{margin-left:2.5mm}
+.pf .sm{font-size:3.2mm}
+.pf .rd{color:#d40000}
+.pf .sm2{font-size:3.3mm;line-height:1.3}
+.pf .rb{position:relative}
+.pf .rl{position:absolute;left:0;right:0;height:0;border-top:var(--bw,1px) solid #000;display:block}
+.pf .rt{position:relative;white-space:pre-wrap;overflow:hidden;padding:0 1.5mm;word-break:break-all;font-size:3.6mm}
+.pf .rm{white-space:pre-wrap;padding:1mm 1.5mm;height:43.4mm;overflow:hidden;font-size:3.4mm;line-height:1.35;word-break:break-all}
+@media print{
+ html,body{margin:0!important;padding:0!important;background:#fff!important}
+ header,main,.sheet,.toast{display:none!important}
+ .pfp{position:static;left:auto}
+ .pfp .pf{zoom:.87}
+}
+.seg button{flex:1;padding:9px 0;border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:8px;font:inherit;font-weight:600;cursor:pointer}.seg button.on{background:var(--ac);border-color:var(--ac);color:#fff}.btn:disabled{opacity:.35;cursor:default}
+.wrap{overflow-x:auto;border:1px solid var(--ln);border-radius:10px;background:var(--sf)}
+table{border-collapse:separate;border-spacing:0;min-width:100%}
+th,td{padding:0;border-bottom:1px solid var(--ln);border-right:1px solid var(--ln);text-align:center}
+th{font-size:12px;font-weight:600;padding:6px 2px;color:var(--mut);background:var(--sf)}
+th.today{color:var(--ac)}
+.nm{position:sticky;left:0;background:var(--sf);text-align:left;padding:6px 8px;min-width:92px;z-index:1;font-weight:600}
+.nm small{display:block;color:var(--mut);font-weight:400;font-size:11px}
+td.c{min-width:58px;height:50px}
+td.c button{width:100%;height:100%;border:0;background:none;padding:3px;cursor:pointer;font:inherit}
+.chip{display:block;border-radius:6px;color:#fff;font-size:12px;line-height:1.2;padding:6px 2px;overflow:hidden;word-break:break-all}
+.chip.off{background:var(--off);color:var(--mut)}
+.empty{color:var(--ln);font-size:20px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.warn{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.row small{color:var(--mut)}
+h2{font-size:14px;margin:18px 0 8px}
+.f{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.f label{font-size:12px;color:var(--mut);display:block}
+.f input,.f select,.f textarea{font:inherit;resize:vertical;width:100%;padding:8px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.f .w{grid-column:1/-1}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;z-index:20}
+.sheet.on{display:flex}
+.sheet>div{background:var(--sf);width:100%;max-width:760px;margin:0 auto;border-radius:16px 16px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom,0px));max-height:80%;overflow:auto}
+.sheet .opt{display:block;width:100%;text-align:left;margin-bottom:8px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.mg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--ln);border:1px solid var(--ln);border-radius:10px;overflow:hidden}
+.mg>*{background:var(--sf);min-width:0}
+.mg .h{text-align:center;font-size:12px;color:var(--mut);padding:4px 0}
+.mg button.mc{border:0;min-height:68px;padding:3px;text-align:left;font:inherit;font-size:11px;line-height:1.3;color:var(--ink);cursor:pointer}
+.mg button.mc.today{box-shadow:inset 0 0 0 2px var(--ac)}
+.mc .d{font-weight:600;font-size:12px;display:block}
+.mc .l{display:block;white-space:nowrap;overflow:hidden}
+.mc .l.bad{color:var(--bad);font-weight:600}
+.mc .blank{min-height:68px}
+.mg button.mc.dp{min-height:44px;text-align:center;background:var(--bg)}
+.kt{width:100%}.kt td,.kt th{padding:6px 4px;font-size:13px}.kt td.ym{text-align:left;padding-left:8px;white-space:nowrap}.kt .tt td{font-weight:600}.kt td.short{color:var(--bad)}
+td.dz{min-width:32px;padding:2px}
+.mg.mw{grid-template-columns:repeat(7,minmax(90px,1fr));min-width:630px;border:0}.ms{display:block;border-left:3px solid;padding-left:3px;margin-top:2px;font-size:11px;line-height:1.3;white-space:normal;word-break:break-all}.z{display:block;border-radius:4px;color:#fff;font-size:11px;line-height:28px;height:28px}.z.off{background:var(--off);color:var(--mut)}
+</style><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
+<script src="sync.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<header><h1>MITSUTOYO管理</h1><div id="st">読み込み中…</div>
+<div class="tabs"><button data-t="g">週</button><button data-t="m">月</button><button data-t="k">人工</button><button data-t="d">出面</button><button data-t="r">日報</button><button data-t="s">現場</button><button data-t="p">作業員</button></div></header>
+<main id="m"></main>
+<div id="tt" class="toast" role="status"></div>
+<div id="pfp" class="pfp"></div>
+<div class="sheet" id="sh"><div id="shc"></div></div>
+<script>
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const prs=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const add=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const mon=d=>add(d,-((d.getDay()+6)%7));
+const DW=['日','月','火','水','木','金','土'];
+const md=d=>(d.getMonth()+1)+'/'+d.getDate();
+const uid=()=>'x'+Math.random().toString(36).slice(2,9);
+const HOL=new Set(['2026-01-01','2026-01-12','2026-02-11','2026-02-23','2026-03-20','2026-04-29','2026-05-03','2026-05-04','2026-05-05','2026-05-06','2026-07-20','2026-08-11','2026-09-21','2026-09-22','2026-09-23','2026-10-12','2026-11-03','2026-11-23','2027-01-01','2027-01-11','2027-02-11','2027-02-23','2027-03-21','2027-03-22','2027-04-29','2027-05-03','2027-05-04','2027-05-05','2027-07-19','2027-08-11','2027-09-20','2027-09-23','2027-10-11','2027-11-03','2027-11-23']);
+const defWork=f=>prs(f).getDay()!=0&&!HOL.has(f);
+function roleAt(pid,sid){const s=M.sites[sid];if(s&&s.f==pid)return '職長';const p=M.staff[pid];return p&&p.r=='応援'?'応援':'施工者'}
+function isWork(s,f){if(f<s.s||f>s.e)return false;if((s.o||[]).includes(f))return false;if((s.x||[]).includes(f))return true;return defWork(f)}
+let tab='g',ws=mon(new Date()),mo=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+const M={staff:{},sites:{},a:{},r:{}};
+let db=null,shared=false;
+const $m=document.getElementById('m'),$sh=document.getElementById('sh'),$st=document.getElementById('st');
+
+/* data layer: shared db when available, otherwise this device only */
+const K={staff:'staff',sites:'sites',a:'asg',r:'reports'};
+function persist(){try{localStorage.setItem('haichi2',JSON.stringify(M))}catch(e){}}
+function werr(){toast('保存できませんでした。編集できる権限があるか、共有設定を確認してください。');return false}
+function put(key,id,data){
+  if(db){return db.doc(K[key]+'/'+id).set(data).catch(werr)}
+  M[key][id]=data;persist();draw();return Promise.resolve()}
+function rem(key,id){
+  if(db){return db.doc(K[key]+'/'+id).delete().catch(werr)}
+  delete M[key][id];persist();draw();return Promise.resolve()}
+function sub(key){
+  db.collection(K[key]).onSnapshot(s=>{const o={};s.docs.forEach(d=>{o[d.id]=d.data()});M[key]=o;
+    if(!s.fromCache)clearTimeout(tm);$st.textContent='共有中：変更は、このアプリを使っている全員に反映されます';draw()},
+    ()=>{$st.textContent='データを読み込めませんでした'})}
+let tm;
+(async()=>{
+  try{db=window.claude&&claude.use?await claude.use('db'):null}catch(e){db=null}
+  if(db){shared=true;tm=setTimeout(()=>{$st.textContent='サーバーに接続できません。表示が古い可能性があります'},10000);sub('staff');sub('sites');sub('a');sub('r')}
+  else{try{const x=JSON.parse(localStorage.getItem('haichi2'));if(x){M.staff=x.staff||{};M.sites=x.sites||{};M.a=x.a||{};M.r=x.r||{}}}catch(e){}
+    $st.textContent='共有設定が未完了、または接続できません：この端末だけに保存しています'}
+  draw()})();
+
+/* helpers */
+const staffL=()=>Object.entries(M.staff).sort((a,b)=>((a[1].ord==null)-(b[1].ord==null))||((a[1].ord??a[1].t??0)-(b[1].ord??b[1].t??0)));
+const siteL=()=>Object.entries(M.sites).sort((a,b)=>a[1].s<b[1].s?-1:a[1].s>b[1].s?1:(a[1].t||0)-(b[1].t||0));
+const col=s=>`hsl(${s.h} 55% 36%)`;
+function index(){const ix={};for(const k in M.a){const x=M.a[k];const p=M.staff[x.p];if(!p)continue;(ix[x.d]=ix[x.d]||[]).push({p:x.p,n:p.n,v:x.v});if(x.v2)ix[x.d].push({p:x.p,n:p.n,v:x.v2})}return ix}
+function active(f){return siteL().filter(([id,s])=>!s.done&&isWork(s,f))}
+const cnt=(ix,f,sid)=>(ix[f]||[]).filter(x=>x.v==sid).length;
+
+function grid(){
+  const ix=index(),days=[...Array(7)].map((_,i)=>add(ws,i)),t=fmt(new Date()),sl=staffL();
+  let h=`<div class="nav"><button class="btn" onclick="wk(-7)">前の週</button><b>${md(days[0])} 〜 ${md(days[6])}</b><button class="btn" onclick="wk(7)">次の週</button></div>`;
+  if(!sl.length)return h+'<div class="card">作業員がまだいません。「作業員」タブから追加してください。</div>';
+  h+=`<div class="wrap"><table><tr><th class="nm"> </th>${days.map(d=>`<th class="${fmt(d)==t?'today':''}">${DW[d.getDay()]}<br>${md(d)}</th>`).join('')}</tr>`;
+  sl.forEach(([pid,p])=>{h+=`<tr><td class="nm">${esc(p.n)}<small>${p.r=='応援'?'応援':'施工者'}</small><small>有給 ${paidCount(pid,String(ws.getFullYear()))}回</small></td>`;
+    days.forEach(d=>{const f=fmt(d),x=M.a[pid+'_'+f],s=x&&x.v!='off'?M.sites[x.v]:null;
+      h+=`<td class="c"><button onclick="pick('${pid}','${f}')" aria-label="${esc(p.n)} ${md(d)}">${x&&x.v=='off'?'<span class="chip off">休み</span>':x&&x.v=='paid'?'<span class="chip pd">有給</span>':chips(x,pid)}</button></td>`});
+    h+='</tr>'});
+  h+='</table></div><p style="font-size:12px;color:var(--mut);margin:6px 0 0">★は、その現場の職長です。名前の下の「有給」は、表示中の年の有給の回数です。</p>';
+  return h}
+
+function month(){
+  const ix=index(),y=mo.getFullYear(),m=mo.getMonth(),t=fmt(new Date());
+  const last=new Date(y,m+1,0).getDate(),lead=(mo.getDay()+6)%7,used=new Set();
+  let h=`<div class="nav"><button class="btn" onclick="mv(-1)">前の月</button><b>${y}年${m+1}月</b><button class="btn" onclick="mv(1)">次の月</button></div><div class="wrap"><div class="mg mw">`;
+  ['月','火','水','木','金','土','日'].forEach(x=>h+=`<div class="h">${x}</div>`);
+  for(let i=0;i<lead;i++)h+='<div class="mc"><div class="blank"></div></div>';
+  for(let d=1;d<=last;d++){const f=fmt(new Date(y,m,d)),by={};
+    (ix[f]||[]).forEach(x=>{if(x.v!='off'&&M.sites[x.v])(by[x.v]=by[x.v]||[]).push(x)});
+    const lines=siteL().map(([id])=>id).filter(id=>by[id]).map(sid=>{used.add(sid);
+      return `<span class="ms" style="border-color:${col(M.sites[sid])}">${by[sid].map(x=>(roleAt(x.p,sid)=='職長'?'★':'')+esc(x.n)).join('・')}</span>`}).join('');
+    h+=`<button class="mc${f==t?' today':''}" onclick="dayInfo('${f}')"><span class="d">${d}</span>${lines}</button>`}
+  h+='</div></div>';
+  h+='<div style="margin-top:8px">'+siteL().filter(([id])=>used.has(id)).map(([id,s])=>`<span style="margin-right:10px;font-size:13px"><span class="sw" style="background:${col(s)}"></span>${esc(s.n)}</span>`).join('')+'</div>';
+  h+='<p style="font-size:12px;color:var(--mut)">色の線は現場、名前はその日の配置です（★は職長）。日をタップすると内訳が見られます。表は左右にスクロールできます。</p>';
+  return h}
+
+let siteTab='act',SQ='',SS='new',YO={};
+function siteCard([id,s],isDone){let n=0;for(let x=prs(s.s),e=prs(s.e);x<=e;x=add(x,1))if(isWork(s,fmt(x)))n++;
+  const btns=isDone?`<button class="btn sm" onclick="setDone('${id}',false)">稼働に戻す</button><button class="btn sm" onclick="delSite('${id}')">削除</button>`:`<button class="btn sm" onclick="editSite('${id}')">編集</button><button class="btn sm" onclick="setDone('${id}',true)">完了</button><button class="btn sm" onclick="delSite('${id}')">削除</button>`;
+  return `<div class="card"><div class="row"><div><span class="sw" style="background:${col(s)}"></span><b>${esc(s.n)}</b>${s.c?`<br><small>元請け：${esc(s.c)}</small>`:''}<br><small>乗り込み ${s.s.slice(5).replace('-','/')}　竣工予定 ${s.e.slice(5).replace('-','/')}　稼働${n}日${M.staff[s.f]?`　職長：${esc(M.staff[s.f].n)}`:''}</small></div><div style="display:flex;gap:6px;flex-shrink:0">${btns}</div></div>${s.memo?`<div style="margin-top:6px;font-size:13px;white-space:pre-wrap">${esc(s.memo)}</div>`:''}</div>`}
+function siteList(){
+  const q=SQ.trim().toLowerCase(),done=siteTab=='done';
+  let a=Object.entries(M.sites).filter(([,s])=>!!s.done==done);
+  const total=a.length;
+  if(q)a=a.filter(([,s])=>[s.n,s.c,s.memo,M.staff[s.f]&&M.staff[s.f].n].join(' ').toLowerCase().includes(q));
+  const ja=(x,y)=>(x||'').localeCompare(y||'','ja');
+  const cmp={new:(x,y)=>x[1].s<y[1].s?1:x[1].s>y[1].s?-1:0,old:(x,y)=>x[1].s<y[1].s?-1:x[1].s>y[1].s?1:0,name:(x,y)=>ja(x[1].n,y[1].n),client:(x,y)=>ja(x[1].c,y[1].c)||ja(x[1].n,y[1].n)};
+  a.sort(cmp[SS]||cmp.new);
+  if(!a.length)return `<div class="card">${total?'該当する現場がありません。':(done?'完了した現場はありません。':'稼働中の現場はありません。「現場を追加」から登録してください。')}</div>`;
+  const by={};a.forEach(x=>{const y=x[1].s.slice(0,4);(by[y]=by[y]||[]).push(x)});
+  const ys=Object.keys(by).sort();if(SS!='old')ys.reverse();
+  const cy=String(new Date().getFullYear());
+  return ys.map(y=>{const k=siteTab+y,open=q?true:(k in YO?YO[k]:y==cy);
+    return `<div class="fold"><button class="fh" onclick="togY('${y}')" aria-expanded="${open}"><span>${open?'▼':'▶'}　${y}年</span><small>${by[y].length}件</small></button>${open?by[y].map(x=>siteCard(x,done)).join(''):''}</div>`}).join('')}
+function togY(y){const k=siteTab+y;YO[k]=!(k in YO?YO[k]:y==String(new Date().getFullYear()));drawSites()}
+function drawSites(){const e=document.getElementById('sl');if(e)e.innerHTML=siteList()}
+function sites(){
+  const L=Object.values(M.sites),act=L.filter(s=>!s.done).length,dn=L.length-act;
+  return '<div class="nav"><h2 style="margin:0">現場一覧</h2><button class="btn pri" onclick="editSite()">現場を追加</button></div>'
+   +`<div class="seg"><button class="${siteTab=='act'?'on':''}" onclick="siteTab='act';draw()">稼働中（${act}）</button><button class="${siteTab=='done'?'on':''}" onclick="siteTab='done';draw()">完了（${dn}）</button></div>`
+   +`<div class="card f"><div class="w"><input type="search" placeholder="現場を検索（現場名・元請け・メモ・職長）" value="${esc(SQ)}" oninput="SQ=this.value;drawSites()"></div><div class="w"><select onchange="SS=this.value;drawSites()">${[['new','乗り込み日が新しい順'],['old','乗り込み日が古い順'],['name','現場名順'],['client','元請け会社順']].map(([v,t])=>`<option value="${v}"${SS==v?' selected':''}>${t}</option>`).join('')}</select></div></div><div id="sl">${siteList()}</div>`}
+function setDone(id,v){const go=()=>put('sites',id,{...M.sites[id],done:v});if(v)askOk('この現場を完了にします。一覧から非表示になります（人工・出面の記録は残ります）。',go,'完了にする');else go()}
+
+let DR=null;
+function editSite(id){
+  const s=id?M.sites[id]:null,t=new Date();
+  DR=s?{...s,id,memo:s.memo||'',x:[...(s.x||[])],o:[...(s.o||[])]}:{id:null,n:'',s:fmt(t),e:fmt(add(t,4)),memo:'',c:'',f:'',x:[],o:[],h:(Object.keys(M.sites).length*67+200)%360};
+  sheetSite();$sh.classList.add('on')}
+function sheetSite(){
+  const d=DR,box=document.getElementById('shc'),st=box.scrollTop,a=prs(d.s),b=prs(d.e);let g='';
+  if(d.e<d.s)g='<p style="color:var(--bad)">竣工予定日は乗り込み日以降にしてください。</p>';
+  else if((b-a)/864e5>364)g='<p style="color:var(--bad)">期間が長すぎます（365日以内）。</p>';
+  else{
+    g='<div class="mg">'+['月','火','水','木','金','土','日'].map(x=>`<div class="h">${x}</div>`).join('');
+    for(let i=(a.getDay()+6)%7;i>0;i--)g+='<div></div>';
+    for(let x=new Date(a);x<=b;x=add(x,1)){const f=fmt(x),on=isWork(d,f),def=defWork(f),red=x.getDay()==0||HOL.has(f);
+      const st=on?(def?'background:var(--sf)':`background:hsl(${d.h} 55% 36%);color:#fff`):'background:var(--off);color:var(--mut)';
+      g+=`<button class="mc dp${on?' on':''}" style="${st}" onclick="tgl('${f}')" aria-pressed="${on}"><span class="d"${red&&!(on&&!def)?' style="color:var(--bad)"':''}>${x.getMonth()+1}/${x.getDate()}</span><span class="l">${!on?'休':!def?'稼働':''}</span></button>`}
+    g+='</div>'}
+  box.innerHTML=`<b>${d.id?'現場を編集':'現場を追加'}</b><div class="f" style="margin:10px 0">
+<div class="w"><label>現場名</label><input value="${esc(d.n)}" oninput="DR.n=this.value" placeholder="例：C工場 ダクト工事"></div>
+<div class="w"><label>元請け会社</label><input value="${esc(d.c||'')}" oninput="DR.c=this.value" placeholder="例：○○建設"></div>
+<div><label>乗り込み日</label><input type="date" value="${d.s}" onchange="DR.s=this.value;sheetSite()"></div>
+<div><label>竣工予定日</label><input type="date" value="${d.e}" onchange="DR.e=this.value;sheetSite()"></div>
+<div class="w"><label>職長（1人）</label><select onchange="DR.f=this.value"><option value="">未選任</option>${staffL().map(([id,p])=>`<option value="${id}"${d.f==id?' selected':''}>${esc(p.n)}</option>`).join('')}</select></div>
+<div class="w"><label>連絡メモ</label><textarea rows="3" oninput="DR.memo=this.value" placeholder="例：入館証は前日までに申請。搬入は8時から。">${esc(d.memo)}</textarea></div></div>
+<p style="font-size:12px;color:var(--mut);margin:0 0 6px">日付をタップして、休みと稼働を切り替えます。日曜・祝日は初めから「休」で、それ以外の日は空欄（通常の稼働日）です。日曜・祝日をタップすると、その日だけ稼働日（色つき）にできます。</p>${g}
+<div style="display:flex;gap:8px;margin-top:12px"><button class="btn" style="flex:1" onclick="$sh.classList.remove('on')">キャンセル</button><button class="btn pri" style="flex:1" onclick="saveSite()">保存</button></div>`;
+  box.scrollTop=st}
+function tgl(f){const want=!isWork(DR,f),def=defWork(f);DR.x=DR.x.filter(v=>v!=f);DR.o=DR.o.filter(v=>v!=f);if(want&&!def)DR.x.push(f);if(!want&&def)DR.o.push(f);sheetSite()}
+
+function staff(){
+  let h='<h2>作業員一覧</h2>'+(staffL().length?'':'<div class="card">作業員がまだいません。下のフォームから追加してください。</div>');
+  const SL=staffL();SL.forEach(([id,p],ix)=>{h+=`<div class="card row"><div><b>${esc(p.n)}</b>　<small>${p.r=='応援'?'応援':'施工者'}</small></div><div style="display:flex;gap:6px"><button class="btn ic" aria-label="上へ" onclick="moveStaff('${id}',-1)"${ix==0?' disabled':''}>▲</button><button class="btn ic" aria-label="下へ" onclick="moveStaff('${id}',1)"${ix==SL.length-1?' disabled':''}>▼</button><button class="btn" onclick="editStaff('${id}')">編集</button><button class="btn" onclick="delStaff('${id}')">削除</button></div></div>`});
+  h+=`<p style="font-size:12px;color:var(--mut)">職長は現場ごとに1人選びます（「現場」タブ）。職長以外の作業員は施工者として数えます。</p><h2>作業員を追加</h2><div class="card f"><div><label>名前</label><input id="pn"></div><div><label>役割</label><select id="pr"><option value="施工">施工者</option><option value="応援">応援</option></select></div><div class="w"><button class="btn pri" style="width:100%" onclick="addStaff()">作業員を追加</button></div></div>`+dataSection();
+  return h}
+
+function dataSection(){return `<h2>データ</h2><div class="card"><div style="font-size:13px;color:var(--mut);margin-bottom:8px">現場・作業員・配置・日報のすべてを、ファイルに書き出したり、読み込んだりできます。</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="exportData()">データを書き出す</button><label class="btn" style="cursor:pointer">データを読み込む<input type="file" accept="application/json,.json" style="display:none" onchange="importData(this)"></label>${window.claude&&claude.signOut?'<button class="btn" onclick="claude.signOut()">ログアウト</button>':''}</div></div>`}
+async function exportData(){
+  let dl=null;try{dl=window.claude&&claude.use?await claude.use('downloads'):null}catch(e){}
+  if(!dl){toast('この画面では書き出しを使えません');return}
+  const blob=new Blob([JSON.stringify({app:'mitsutoyo-kanri',v:1,staff:M.staff,sites:M.sites,a:M.a,r:M.r})],{type:'application/json'});
+  try{await dl.save({filename:`MITSUTOYO管理_${fmt(new Date())}.json`,data:blob});toast('書き出しました')}catch(e){if(!e||e.code!='declined')toast('書き出せませんでした')}}
+function importData(inp){
+  const f=inp.files&&inp.files[0];inp.value='';if(!f)return;
+  const rd=new FileReader();
+  rd.onerror=()=>toast('ファイルを読み込めませんでした');
+  rd.onload=()=>{let x;try{x=JSON.parse(rd.result)}catch(e){toast('ファイルの形式が正しくありません');return}
+    if(!x||x.app!='mitsutoyo-kanri'){toast('このアプリで書き出したファイルを選んでください');return}
+    const ks=['staff','sites','a','r'],n=ks.reduce((t,k)=>t+Object.keys(x[k]||{}).length,0);
+    askOk(`${n}件のデータを読み込みます。同じIDのデータは上書きされます。`,async()=>{
+      const jobs=[];for(const k of ks)for(const id in (x[k]||{}))jobs.push(put(k,id,x[k][id]));
+      await Promise.all(jobs);toast('読み込みました')},'読み込む')};
+  rd.readAsText(f)}
+
+function moveStaff(id,dir){const ids=staffL().map(([i])=>i),i=ids.indexOf(id),j=i+dir;if(j<0||j>=ids.length)return;
+  [ids[i],ids[j]]=[ids[j],ids[i]];
+  ids.forEach((sid,n)=>{if(M.staff[sid].ord!==n)put('staff',sid,{...M.staff[sid],ord:n})})}
+let RP={sid:'',d:fmt(new Date())};
+const WX=['晴れ','曇り','雨','雪'];
+function toast(t){const e=document.getElementById('tt');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),Math.max(1800,t.length*140))}
+let CF=null;
+function askOk(msg,fn,label){CF=fn;document.getElementById('shc').innerHTML=`<b>${esc(msg)}</b><div style="display:flex;gap:8px;margin-top:14px"><button class="btn" style="flex:1" onclick="$sh.classList.remove('on')">キャンセル</button><button class="btn pri" style="flex:1" onclick="$sh.classList.remove('on');CF()">${esc(label||'OK')}</button></div>`;$sh.classList.add('on')}
+function rpt(sid,d){RP={sid,d};tab='r';$sh.classList.remove('on');draw();window.scrollTo(0,0)}
+function readForm(){const v=i=>{const e=document.getElementById(i);return e?e.value:''};return{w:v('rw'),c:v('rc'),memo:v('rm'),rem:v('rr'),ex:Array.from({length:7},(_,i)=>({n:i<3?EXN[i]:v('x'+i+'n'),q:v('x'+i+'q'),u:v('x'+i+'u')}))}}
+function report(){
+  if(RP.pv)return prevPage();
+  const L=siteL(),act=L.filter(([,s])=>!s.done);
+  if(!M.sites[RP.sid])RP.sid=(act[0]||L[0]||[''])[0];
+  let h='<h2 style="margin-top:0">作業日報</h2>';
+  if(!RP.sid)return h+'<div class="card">現場がまだありません。「現場」タブから追加してください。</div>';
+  const s=M.sites[RP.sid],id=RP.sid+'_'+RP.d,r=RP.dirty&&RP.dr?RP.dr:(M.r[id]||{}),d=prs(RP.d),fm=M.staff[s.f];
+  const crew=staffL().filter(([pid])=>{const x=M.a[pid+'_'+RP.d];return x&&(x.v==RP.sid||x.v2==RP.sid)}).map(([pid,p])=>{const ro=roleAt(pid,RP.sid);return esc(p.n)+(ro=='施工者'?'':'（'+ro+'）')});
+  h+=`<div class="card f"><div class="w"><label>現場</label><select onchange="RP.sid=this.value;RP.dirty=0;draw()">${L.map(([i,x])=>`<option value="${i}"${i==RP.sid?' selected':''}>${esc(x.n)}${x.done?'（完了）':''}</option>`).join('')}</select></div><div class="w"><label>日付</label><input type="date" value="${RP.d}" onchange="if(this.value){RP.d=this.value;RP.dirty=0;draw()}"></div></div>`;
+  h+=`<div class="card"><div class="row"><b>${esc(s.n)}</b><small>${d.getFullYear()}年${md(d).replace('/','月')}日（${DW[d.getDay()]}）</small></div><small>元請け：${esc(s.c||'未入力')}　職長：${fm?esc(fm.n):'未選任'}</small><div style="margin-top:6px"><small>作業員（出面より自動）</small><br>${crew.join('、')||'この日の配置はありません'}</div></div>`;
+  h+=`<div class="card f" oninput="RP.dirty=1" onchange="RP.dirty=1"><div class="w"><label>天候</label><select id="rw"><option value="">未選択</option>${WX.map(x=>`<option${r.w==x?' selected':''}>${x}</option>`).join('')}</select></div>
+<div class="w"><label>メモ書き欄</label><textarea id="rm" rows="3">${esc(r.memo||'')}</textarea><button type="button" class="btn sm" style="margin-top:6px" onclick="togRed('rm')">カーソルの行を赤字／黒字に切替</button></div>
+<div class="w"><label>作業内容</label><textarea id="rc" rows="5">${esc(r.c||'')}</textarea><button type="button" class="btn sm" style="margin-top:6px" onclick="togRed('rc')">カーソルの行を赤字／黒字に切替</button></div>
+${exForm(r)}
+<div class="w"><label>特記備考欄</label><textarea id="rr" rows="3">${esc(r.rem||'')}</textarea><button type="button" class="btn sm" style="margin-top:6px" onclick="togRed('rr')">カーソルの行を赤字／黒字に切替</button></div>
+<div class="w"><button class="btn pri" style="width:100%" onclick="saveRpt()">${M.r[id]?'日報を更新':'日報を保存'}</button></div>
+<div class="w"><button class="btn" style="width:100%" onclick="openPv()">B5の書式で確認・印刷</button></div></div>`;
+  h+=`<h2>日報の一覧</h2><div class="card f"><div class="w"><input type="search" placeholder="日報を検索（日付・作業内容・メモ・現場名など）" value="${esc(RQ)}" oninput="RQ=this.value;upR()"></div><div><select onchange="RS=this.value;upR()">${[['new','日付が新しい順'],['old','日付が古い順'],['cost','経費が多い順']].map(([v,t])=>`<option value="${v}"${RS==v?' selected':''}>${t}</option>`).join('')}</select></div><div><select onchange="RA=this.value=='1';upR()"><option value="0"${RA?'':' selected'}>この現場</option><option value="1"${RA?' selected':''}>すべての現場</option></select></div></div><div id="rlist">${rhist()}</div>`;
+  return h}
+let RQ='',RS='new',RA=false;
+function upR(){const e=document.getElementById('rlist');if(e)e.innerHTML=rhist()}
+function rhist(){
+  const q=RQ.trim().toLowerCase();
+  let a=Object.entries(M.r).filter(([,v])=>M.sites[v.sid]&&(RA||v.sid==RP.sid));
+  const tot=a.length;
+  if(q)a=a.filter(([,v])=>[v.d,v.w,v.c,v.memo,v.rem,M.sites[v.sid].n,...exRows(v).map(e=>e.n)].join(' ').toLowerCase().includes(q));
+  a.sort((x,y)=>RS=='old'?(x[1].d<y[1].d?-1:1):RS=='cost'?(exTotal(y[1])-exTotal(x[1]))||(x[1].d<y[1].d?1:-1):(x[1].d<y[1].d?1:-1));
+  if(!a.length)return `<div class="card">${tot?'該当する日報がありません。':'まだ日報がありません。'}</div>`;
+  return a.slice(0,100).map(([,v])=>{const dd=prs(v.d);return `<button class="card hb" onclick="RP.sid='${v.sid}';RP.d='${v.d}';RP.dirty=0;draw();window.scrollTo(0,0)"><b>${dd.getFullYear()}/${md(dd)}（${DW[dd.getDay()]}）</b>${RA?`　<small>${esc(M.sites[v.sid].n)}</small>`:''}　<small>${esc(v.w||'')}　経費${fmtY(exTotal(v))}円</small><br><small>${esc((v.c||'').replaceAll(RED,'').split('\n')[0].slice(0,40))}</small></button>`}).join('')+(a.length>100?'<div class="card">先頭の100件を表示しています。検索で絞り込んでください。</div>':'')}
+function saveRpt(){
+  const f=readForm(),num=x=>(x===''||isNaN(parseFloat(x)))?null:Math.max(0,parseFloat(x));
+  put('r',RP.sid+'_'+RP.d,{sid:RP.sid,d:RP.d,w:f.w,c:f.c.trim(),memo:f.memo.trim(),rem:f.rem.trim(),ex:f.ex.map(e=>({n:(e.n||'').trim(),q:num(e.q),u:num(e.u)})),u:Date.now()}).then(ok=>{if(ok!==false){RP.dirty=0;RP.dr=null;toast('保存しました')}})}
+function openPv(){RP.dr=readForm();RP.pv=true;draw();window.scrollTo(0,0)}
+
+/* B5 form (matches the paper 工事日報) */
+const RED='【赤】';
+function rtxt(t){return String(t||'').split('\n').map(l=>l.startsWith(RED)?`<span class="rd">${esc(l.slice(RED.length))}</span>`:esc(l)).join('\n')}
+function togRed(id){const e=document.getElementById(id);if(!e)return;const v=e.value,pos=e.selectionStart==null?0:e.selectionStart;
+  const a=pos>0?v.lastIndexOf('\n',pos-1)+1:0;let b=v.indexOf('\n',pos);if(b<0)b=v.length;
+  const line=v.slice(a,b),nl=line.startsWith(RED)?line.slice(RED.length):RED+line;
+  e.value=v.slice(0,a)+nl+v.slice(b);RP.dirty=1;e.focus();const np=a+nl.length;try{e.setSelectionRange(np,np)}catch(x){}}
+const EXN=['高速代','駐車場代','電車代'];
+const fmtY=v=>Number(v).toLocaleString('ja-JP');
+function amt(q,u){const U=parseFloat(u);if(u===''||u==null||isNaN(U))return '';const Q=(q===''||q==null||isNaN(parseFloat(q)))?1:parseFloat(q);return Math.round(Q*U*100)/100}
+function exRows(r){const a=Array.isArray(r.ex)?r.ex:[];return Array.from({length:7},(_,i)=>{const e=a[i]||{},lg=i==0?r.hw:i==1?r.pk:i==2?r.tr:null;return{n:i<3?EXN[i]:(e.n||''),q:e.q??'',u:e.u??(a.length?'':(lg??''))}})}
+function exTotal(r){return exRows(r).reduce((t,e)=>{const a=amt(e.q,e.u);return t+(a===''?0:a)},0)}
+const gv=i=>{const e=document.getElementById(i);return e?e.value:''};
+function calcEx(){let t=0;for(let i=0;i<7;i++){const a=amt(gv('x'+i+'q'),gv('x'+i+'u')),el=document.getElementById('x'+i+'a');if(el)el.textContent=a===''?'':fmtY(a);if(a!=='')t+=a}const e=document.getElementById('xt');if(e)e.textContent=fmtY(t)}
+function exForm(r){
+  return `<div class="w"><label>経費欄（金額＝数量×単価で自動計算。数量が空なら1として計算）</label><div class="ex" oninput="calcEx()"><div class="eh"><span>品名</span><span>数量</span><span>単価（円）</span><span>金額（円）</span></div>${exRows(r).map((e,i)=>{const a=amt(e.q,e.u);return `<div class="er">${i<3?`<span class="en">${e.n}</span>`:`<input id="x${i}n" value="${esc(e.n)}" placeholder="品名">`}<input id="x${i}q" type="number" min="0" step="any" inputmode="decimal" value="${e.q}"><input id="x${i}u" type="number" min="0" step="any" inputmode="decimal" value="${e.u}"><span class="ea" id="x${i}a">${a===''?'':fmtY(a)}</span></div>`}).join('')}<div class="et">経費合計　<b id="xt">${fmtY(exTotal(r))}</b> 円</div></div></div>`}
+
+const RL=(n,h)=>Array.from({length:n-1},(_,i)=>`<i class="rl" style="top:${((i+1)*h).toFixed(2)}mm"></i>`).join('');
+const ruled=(t,n,h)=>`<div class="rb" style="height:${(n*h).toFixed(2)}mm">${RL(n,h)}<div class="rt" style="line-height:${h}mm;height:${(n*h).toFixed(2)}mm">${rtxt(t)}</div></div>`;
+const vs=t=>[...t].map(c=>`<span>${c}</span>`).join('');
+function pfHTML(){
+  const s=M.sites[RP.sid]||{},id=RP.sid+'_'+RP.d,r=(RP.pv&&RP.dr)?RP.dr:(M.r[id]||{}),d=prs(RP.d),fm=M.staff[s.f];
+  const yen=v=>v===''||v==null?'':Number(v).toLocaleString('ja-JP');
+  const crew=staffL().filter(([pid])=>{const x=M.a[pid+'_'+RP.d];return x&&(x.v==RP.sid||x.v2==RP.sid)}).map(([,p])=>p.n);
+  const ex=exRows(r);
+  const cg=a=>'<colgroup>'+a.map(x=>`<col style="width:${x}%">`).join('')+'</colgroup>';
+  return `<div class="pf"><div class="pt"><span class="ti">工　事　日　報</span><span class="co">三豊工業株式会社</span></div>
+<div class="pb"><table>${cg([12.6,45.4,5.9,10,26.1])}<tr style="height:12mm"><td class="lb">年　月　日</td><td class="c">令和 <b>${d.getFullYear()-2018}</b> 年 <b>${d.getMonth()+1}</b> 月 <b>${d.getDate()}</b> 日（<b>${DW[d.getDay()]}</b>）</td><td class="lb">天候</td><td class="c">${esc(r.w||'')}</td><td class="lb">職　長　名</td></tr></table>
+<table>${cg([9.3,64.6,26.1])}<tr style="height:14mm"><td class="lb">工　事<br>名　称</td><td class="v"><div class="v2"><span>${esc(s.n||'')}</span><span class="sm">工事</span></div></td><td class="c">${fm?esc(fm.n):''}</td></tr></table>
+<table>${cg([13,87])}<tr><td class="lb vs">${vs('メモ書き欄')}</td><td class="np">${ruled(r.memo||'',5,8.6)}</td></tr></table>
+<table><tr><td class="lb" style="height:11mm">作　業　内　容</td></tr><tr><td class="np">${ruled(r.c||'',10,12)}</td></tr></table>
+<table>${cg([11.1,36.5,52.4])}<tr style="height:11mm"><td class="lb">元 請 名</td><td class="v">${esc(s.c||'')}</td><td class="v sm2">${esc(crew.join('、'))}</td></tr></table>
+<table>${cg([4.5,24.5,11.5,14,14,31.5])}<tr style="height:6mm"><td></td><td class="lb">品　　名</td><td class="lb">数　量</td><td class="lb">単　価</td><td class="lb">金　額</td><td class="lb">特記備考欄</td></tr>${ex.map((e,i)=>`<tr style="height:6.2mm">${i==0?`<td class="lb vs" rowspan="7">${vs('経費欄')}</td>`:''}<td class="v">${esc(e.n)}</td><td class="v r">${e.q===''||e.q==null?'':esc(String(e.q))}</td><td class="v r">${yen(e.u)}</td><td class="v r">${yen(amt(e.q,e.u))}</td>${i==0?`<td rowspan="7" class="np"><div class="rm">${rtxt(r.rem)}</div></td>`:''}</tr>`).join('')}</table></div></div>`}
+function fillPrint(){document.getElementById('pfp').innerHTML=pfHTML()}
+function prevPage(){
+  fillPrint();
+  const w=Math.max(280,Math.min(window.innerWidth,760)-28),k=w/718.1,hh=(274*3.7795*k).toFixed(1),dpr=window.devicePixelRatio||1,ld=Math.max(1,Math.round(dpr)),zs=!!(window.CSS&&CSS.supports&&CSS.supports('zoom','1')),bw=(ld/(dpr*k)).toFixed(4)+'px';
+  return `<div class="nav"><button class="btn" onclick="RP.pv=false;draw()">戻る</button><b>B5の書式（プレビュー）</b></div>
+<div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn" style="flex:1" onclick="doPrint()">印刷</button><button class="btn pri" style="flex:1" onclick="pdfSave()">PDFで保存</button></div>
+<p style="font-size:12px;color:var(--mut);margin:0 0 10px">用紙はB5の縦、倍率は「100％（実際のサイズ）」で印刷してください。上下左右に8mmの余白を取っています。「印刷」で印刷画面が開かない場合は、自動でPDFを保存します。保存したPDFを開いて、B5・倍率100％で印刷してください。</p>
+<div style="width:${w}px;${zs?'':`height:${hh}px;overflow:hidden;`}background:#fff;box-shadow:0 0 0 1px var(--ln);--bw:${bw}"><div style="width:190mm;${zs?`zoom:${k}`:`transform:scale(${k});transform-origin:0 0`}">${pfHTML()}</div></div>`}
+function doPrint(){fillPrint();let ok=false;const h=()=>{ok=true};window.addEventListener('beforeprint',h,{once:true});
+  try{window.print()}catch(e){}
+  setTimeout(()=>{window.removeEventListener('beforeprint',h);if(!ok){toast('この画面では印刷画面を開けません。PDFを保存しますので、保存したPDFを開いて印刷してください');pdfSave()}},700)}
+async function pdfSave(){
+  fillPrint();
+  let dl=null;try{dl=window.claude&&claude.use?await claude.use('downloads'):null}catch(e){}
+  if(!dl){toast('この画面ではPDF保存を使えません。印刷をお試しください');return}
+  if(!window.html2canvas||!window.jspdf){toast('PDF作成の部品を読み込めませんでした');return}
+  toast('PDFを作成しています…');
+  try{
+    const cv=await html2canvas(document.querySelector('#pfp .pf'),{scale:3,backgroundColor:'#ffffff',onclone:doc=>{const e=doc.getElementById('pfp');e.style.position='static';e.style.left='0'}});
+    const pdf=new window.jspdf.jsPDF({unit:'mm',format:[182,257],orientation:'portrait'}),w=Math.min(166,241*cv.width/cv.height),h=w*cv.height/cv.width;
+    pdf.addImage(cv.toDataURL('image/jpeg',.95),'JPEG',(182-w)/2,8,w,h);
+    const nm=((M.sites[RP.sid]||{}).n||'').replace(/[\\\/:*?"<>|]/g,'');
+    await dl.save({filename:`工事日報_${nm}_${RP.d}.pdf`,data:pdf.output('blob')})
+  }catch(e){if(!e||e.code!='declined')toast('PDFを保存できませんでした')}}
+
+let SR=null;
+function editStaff(id){const p=M.staff[id];SR={id,n:p.n,r:p.r=='応援'?'応援':'施工'};sheetStaff();$sh.classList.add('on')}
+function sheetStaff(){
+  document.getElementById('shc').innerHTML=`<b>作業員を編集</b><div class="f" style="margin:10px 0"><div class="w"><label>名前</label><input value="${esc(SR.n)}" oninput="SR.n=this.value"></div><div class="w"><label>役割</label><select onchange="SR.r=this.value"><option value="施工"${SR.r=='施工'?' selected':''}>施工者</option><option value="応援"${SR.r=='応援'?' selected':''}>応援</option></select></div></div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="$sh.classList.remove('on')">キャンセル</button><button class="btn pri" style="flex:1" onclick="saveStaff()">保存</button></div>`}
+function saveStaff(){if(!SR.n.trim()){toast('名前を入力してください');return}$sh.classList.remove('on');put('staff',SR.id,{...M.staff[SR.id],n:SR.n.trim(),r:SR.r})}
+
+function kosu(){
+  const R={};
+  for(const k in M.a){const x=M.a[k];if(!M.staff[x.p])continue;const ids=[x.v,x.v2].filter(i=>i&&M.sites[i]);if(!ids.length)continue;const wt=1/ids.length;
+    ids.forEach(sid=>{const ym=x.d.slice(0,7),r=roleAt(x.p,sid),c=r=='職長'?'f':r=='応援'?'o':'s';R[sid]=R[sid]||{};R[sid][ym]=R[sid][ym]||{f:0,s:0,o:0};R[sid][ym][c]+=wt})}
+  let h='<h2>現場別・月別の人工</h2><p style="font-size:12px;color:var(--mut);margin:0 0 8px">1日の配置を1人工として数えます（1日に2現場の場合は、それぞれ0.5人工）。</p>';
+  if(!siteL().length)return h+'<div class="card">現場がまだありません。</div>';
+  siteL().forEach(([sid,s])=>{
+    const yms=Object.keys(R[sid]||{}).sort(),T={f:0,s:0,o:0};
+    const rows=yms.map(ym=>{const r=R[sid][ym],tot=r.f+r.s+r.o;T.f+=r.f;T.s+=r.s;T.o+=r.o;
+      return `<tr><td class="ym">${ym.replace('-','年')}月</td><td>${r.f}</td><td>${r.s}</td><td>${r.o}</td><td><b>${tot}</b></td></tr>`}).join('');
+    h+=`<div class="card"><span class="sw" style="background:${col(s)}"></span><b>${esc(s.n)}</b>${M.staff[s.f]?`<small style="color:var(--mut)">　職長：${esc(M.staff[s.f].n)}</small>`:''}<div class="wrap" style="margin-top:8px"><table class="kt"><tr><th>月</th><th>職長</th><th>施工者</th><th>応援</th><th>合計</th></tr>${rows?rows+`<tr class="tt"><td class="ym">計</td><td>${T.f}</td><td>${T.s}</td><td>${T.o}</td><td>${T.f+T.s+T.o}</td></tr>`:'<tr><td class="ym" colspan="5">まだ配置がありません</td></tr>'}</table></div></div>`});
+  return h}
+
+function dezura(){
+  const y=mo.getFullYear(),m=mo.getMonth(),last=new Date(y,m+1,0).getDate(),sl=staffL();
+  let h=`<div class="nav"><button class="btn" onclick="mv(-1)">前の月</button><b>${y}年${m+1}月の出面</b><button class="btn" onclick="mv(1)">次の月</button></div>`;
+  if(!sl.length)return h+'<div class="card">作業員がまだいません。「作業員」タブから追加してください。</div>';
+  const days=[...Array(last)].map((_,i)=>new Date(y,m,i+1)),used=new Set();
+  let rows='';
+  sl.forEach(([pid,p])=>{let w=0,o=0,pd=0;const by={};
+    const cells=days.map(d=>{const x=M.a[pid+'_'+fmt(d)];
+      if(x&&x.v=='paid'){pd++;return '<td class="dz"><span class="z pd">有</span></td>'}
+      if(x&&x.v=='off'){o++;return '<td class="dz"><span class="z off">休</span></td>'}
+      const ids=x?[x.v,x.v2].filter(i=>i&&M.sites[i]):[];if(!ids.length)return '<td class="dz"></td>';
+      w++;ids.forEach(i=>{by[i]=(by[i]||0)+1;used.add(i)});
+      return `<td class="dz">${ids.map(i=>{const s=M.sites[i];return `<button class="z${ids.length>1?' z2':''}${M.r[i+'_'+fmt(d)]?' rp':''}" style="background:${col(s)}" onclick="rpt('${i}','${fmt(d)}')" aria-label="${esc(s.n)}の日報">${esc([...s.n][0])}</button>`}).join('')}</td>`}).join('');
+    rows+=`<tr><td class="nm">${esc(p.n)}<small>${p.r=='応援'?'応援':'施工者'}</small></td><td><b>${w}</b>日</td><td><b>${pd}</b></td>${cells}</tr>`;
+  });
+  h+=`<div class="wrap"><table><tr><th class="nm"> </th><th style="min-width:44px">出勤</th><th style="min-width:40px">有給</th>${days.map(d=>{const red=d.getDay()==0||HOL.has(fmt(d));return `<th style="min-width:32px${red?';color:var(--bad)':''}">${d.getDate()}<br>${DW[d.getDay()]}</th>`}).join('')}</tr>${rows}</table></div>`;
+  h+='<p style="font-size:12px;color:var(--mut);margin:6px 0 0">色のついたマスは出勤で、文字は現場名の頭文字です。「休」は休み、「有」は有給です。マスをタップすると、その日の日報が開きます（下に白い線があるマスは日報が入力済み）。</p>';
+  h+=[...used].map(id=>`<span style="margin-right:10px;font-size:13px"><span class="sw" style="background:${col(M.sites[id])}"></span>${esc(M.sites[id].n)}</span>`).join('');
+  return h}
+
+function draw(){
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t==tab));
+  if(tab=='r'&&!RP.pv&&RP.dirty&&document.getElementById('rc'))RP.dr=readForm();const sy=window.scrollY;
+  $m.innerHTML=tab=='g'?grid():tab=='m'?month():tab=='k'?kosu():tab=='d'?dezura():tab=='r'?report():tab=='s'?sites():staff();
+  window.scrollTo(0,sy)}
+document.querySelector('.tabs').onclick=e=>{const t=e.target.dataset.t;if(t){tab=t;draw()}};
+$sh.onclick=e=>{if(e.target==$sh)$sh.classList.remove('on')};
+function wk(n){ws=add(ws,n);draw()}
+function mv(n){mo=new Date(mo.getFullYear(),mo.getMonth()+n,1);draw()}
+
+function paidCount(pid,y){let n=0;for(const k in M.a){const x=M.a[k];if(x.p==pid&&x.v=='paid'&&x.d.startsWith(y))n++}return n}
+let PK=null;
+function pick(pid,f){
+  const x=M.a[pid+'_'+f];
+  PK={pid,f,sel:x&&x.v!='off'&&x.v!='paid'?[x.v,x.v2].filter(i=>i&&M.sites[i]):[]};
+  renderPick();$sh.classList.add('on')}
+function renderPick(){
+  const {pid,f,sel}=PK,p=M.staff[pid],d=prs(f),box=document.getElementById('shc'),st=box.scrollTop;
+  const ids=active(f).map(([id])=>id);sel.forEach(i=>{if(!ids.includes(i))ids.push(i)});
+  box.innerHTML=`<b>${esc(p.n)}　${md(d)}（${DW[d.getDay()]}）</b><p style="font-size:12px;color:var(--mut);margin:4px 0 10px">1日に2現場まで選べます（選択中 ${sel.length}/2）。選んだら「決定」を押してください。</p>`+
+   (ids.length?ids.map(sid=>{const s=M.sites[sid],k=sel.indexOf(sid);return `<button class="btn opt" style="${k>=0?`border:2px solid ${col(s)}`:''}" onclick="togSel('${sid}')"><span class="sw" style="background:${col(s)}"></span>${esc(s.n)}${k>=0?'　'+['①','②'][k]:''}</button>`}).join(''):'<p style="color:var(--mut)">この日に稼働する現場がありません。「現場」タブで期間を確認するか、下から当日のみの現場を追加してください。</p>')+
+   `<button class="btn pri opt" onclick="saveSel()">${sel.length?`決定（${sel.length}現場）`:'決定（配置なし）'}</button><div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn" style="flex:1" onclick="setA('${pid}','${f}','off')">休み</button><button class="btn" style="flex:1" onclick="setA('${pid}','${f}','paid')">有給</button><button class="btn" style="flex:1" onclick="setA('${pid}','${f}','')">配置を外す</button></div>`+quickForm(pid,f);
+  box.scrollTop=st}
+function togSel(sid){const i=PK.sel.indexOf(sid);if(i>=0)PK.sel.splice(i,1);else if(PK.sel.length>=2){toast('1日に選べる現場は2つまでです');return}else PK.sel.push(sid);renderPick()}
+function setSel(pid,f,sel){const id=pid+'_'+f;if(!sel.length)return rem('a',id);const d={p:pid,d:f,v:sel[0]};if(sel[1])d.v2=sel[1];return put('a',id,d)}
+function saveSel(){$sh.classList.remove('on');setSel(PK.pid,PK.f,PK.sel)}
+function chips(x,pid){const ids=x?[x.v,x.v2].filter(i=>i&&M.sites[i]):[];if(!ids.length)return '<span class="empty">＋</span>';const two=ids.length>1;
+  return ids.map(i=>{const s=M.sites[i];return `<span class="chip${two?' c2':''}" style="background:${col(s)}">${s.f==pid?'★':''}${esc(s.n)}</span>`}).join('')}
+function dropSite(id){return Object.entries(M.a).filter(([,x])=>x.v==id||x.v2==id).map(([k,x])=>{const rest=[x.v,x.v2].filter(i=>i&&i!=id);return rest.length?put('a',k,{p:x.p,d:x.d,v:rest[0]}):rem('a',k)})}
+function quickForm(pid,f){return `<div class="card f" style="margin:10px 0"><div class="w"><label>当日のみの現場を追加（この日だけ）</label><input id="qn" placeholder="現場名"></div><div class="w"><input id="qc" placeholder="元請け会社（任意）"></div><div class="w"><button class="btn pri" style="width:100%" onclick="quickSite('${pid}','${f}')">追加してこの日に配置</button></div></div>`}
+function quickSite(pid,f){const n=gv('qn').trim();if(!n){toast('現場名を入力してください');return}
+  const sid=uid(),data={n,c:gv('qc').trim(),s:f,e:f,memo:'',f:'',x:[f],o:[],done:false,h:(Object.keys(M.sites).length*67+200)%360,t:Date.now()};
+  $sh.classList.remove('on');
+  const cur=PK&&PK.pid==pid&&PK.f==f?PK.sel:[],sel=cur.length>=2?[cur[0],sid]:[...cur,sid];put('sites',sid,data).then(ok=>{if(ok!==false)setSel(pid,f,sel)})}
+function setA(pid,f,v){$sh.classList.remove('on');const id=pid+'_'+f;if(v)put('a',id,{p:pid,d:f,v});else rem('a',id)}
+
+function dayInfo(f){
+  const ix=index(),d=prs(f),list=ix[f]||[],assigned=new Set(list.map(x=>x.p));
+  let h=`<b>${md(d)}（${DW[d.getDay()]}）の配置</b><div style="height:10px"></div>`;
+  const ids=siteL().map(([id])=>id).filter(id=>list.some(x=>x.v==id));
+  h+=ids.length?ids.map(sid=>{const s=M.sites[sid],names=list.filter(x=>x.v==sid).map(x=>{const r=roleAt(x.p,sid);return esc(x.n)+(r=='施工者'?'':'（'+r+'）')});
+    return `<div class="card"><span class="sw" style="background:${col(s)}"></span><b>${esc(s.n)}</b>　${names.length}人<br>${names.join('、')}${s.memo?`<br><small style="white-space:pre-wrap;color:var(--mut)">連絡：${esc(s.memo)}</small>`:''}<br><button class="btn" style="margin-top:6px" onclick="rpt('${sid}','${f}')">日報を開く</button></div>`}).join(''):'<div class="card">この日の配置はありません。</div>';
+  const off=list.filter(x=>x.v=='off').map(x=>esc(x.n)),paid=list.filter(x=>x.v=='paid').map(x=>esc(x.n)),free=staffL().filter(([id])=>!assigned.has(id)).map(([,p])=>esc(p.n));
+  h+=`<div class="card">休み：${off.join('、')||'なし'}<br>有給：${paid.join('、')||'なし'}<br>未配置：${free.join('、')||'なし'}</div><button class="btn pri opt" onclick="goWeek('${f}')">この週の配置表を開く</button>`;
+  document.getElementById('shc').innerHTML=h;$sh.classList.add('on')}
+
+function goWeek(f){ws=mon(prs(f));tab='g';$sh.classList.remove('on');draw()}
+
+function saveSite(){const d=DR;
+  if(!d.n.trim()||!d.s||!d.e||d.e<d.s||(prs(d.e)-prs(d.s))/864e5>364){toast('現場名と期間を確認してください（竣工予定日は乗り込み日以降、365日以内）');return}
+  const data={n:d.n.trim(),s:d.s,e:d.e,memo:d.memo.trim(),c:(d.c||'').trim(),f:d.f||'',done:!!d.done,h:d.h,t:d.t||Date.now(),x:d.x.filter(f=>f>=d.s&&f<=d.e),o:d.o.filter(f=>f>=d.s&&f<=d.e)};
+  $sh.classList.remove('on');put('sites',d.id||uid(),data)}
+function delSite(id){askOk('この現場を削除します。配置と日報も削除されます。',()=>Promise.all([...dropSite(id),...Object.keys(M.r).filter(k=>M.r[k].sid==id).map(k=>rem('r',k))]).then(()=>rem('sites',id)),'削除する')}
+function addStaff(){const n=document.getElementById('pn').value.trim();if(!n){toast('名前を入力してください');return}
+  put('staff',uid(),{n,r:document.getElementById('pr').value,t:Date.now()})}
+function delStaff(id){askOk('この作業員を削除します。',()=>Promise.all(Object.keys(M.a).filter(k=>M.a[k].p==id).map(k=>rem('a',k))).then(()=>rem('staff',id)),'削除する')}
+draw();
+</script><script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})</script>
+</body></html>

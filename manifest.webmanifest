@@ -1,0 +1,17 @@
+{
+  "name": "MITSUTOYO管理",
+  "short_name": "MITSUTOYO",
+  "description": "空調設備工事の人員配置・日程・出面・日報の管理アプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e7c9a",
+  "theme_color": "#0e7c9a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
